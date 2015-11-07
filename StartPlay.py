@@ -35,6 +35,18 @@ def StartGame(instance):
 	window = instance.parent.parent
 	window.clear_widgets()
 	
+	# -- Make Player 1 Label
+	player1Layout = AnchorLayout(anchor_x='left', anchor_y='top', padding=5)
+	player1 = Label(text='Player 1')
+	player1Layout.add_widget(player1)
+	window.add_widget(player1Layout)
+	
+	# -- Make Player 2 Label
+	player2Layout = AnchorLayout(anchor_x='left', anchor_y='bottom', padding=5)
+	player2 = Label(text='Player 2')
+	player2Layout.add_widget(player2)
+	window.add_widget(player2Layout)
+	
 	# --Menu Button
 	menuBtnLayout = AnchorLayout(anchor_x='right', anchor_y='top', padding=5)
 	menuBtn = Button(text='Main Menu', background_color=(0.2,0.32,1.8,1))
@@ -43,59 +55,53 @@ def StartGame(instance):
 	menuBtnLayout.add_widget(menuBtn)
 	window.add_widget(menuBtnLayout)
 	
-	#topPlayerLabel = Label(text='Player1', anchor_x='left')
-	#menuBtnLayout.add_widget(topPlayerLabel)
-	
-	#bottomPlayerLabel = Label(text='Player2', anchor_x='left', anchor_y='bottom')
-	#menuBtnLayout.add_widget(bottomPlayerLabel)
-	
 	# -- Create Holders for PieceToPlay, GameBoard, AvaliablePieces
 	pieceToPlayLayout = AnchorLayout(anchor_x='left', anchor_y='center', padding=(160,0,-120,0))
 	playBoardLayout = AnchorLayout(anchor_x='center', anchor_y='center', padding=(0,0,100,0))
 	piecesAvailableLayout = AnchorLayout(anchor_x='right', anchor_y='center', padding=(80,0,40,0))
 	
 	# -- PieceToPlay Button	
-	toPlayBtn = Button(text='PieceToPlay', background_color=(.2,.8,.2,1))
+	toPlayBtn = Button(background_color=(.2,1,.2,1))
 	toPlayBtn.size_hint=(0.1,0.1)
-	toPlayBtn.name = 'hello' # What do you want?
+	toPlayBtn.name = ''
 	pieceToPlayLayout.add_widget(toPlayBtn)
 	window.add_widget(pieceToPlayLayout)
 	# -- SETTING GLOBAL VAR HERE
 	g_pieceToPlay = toPlayBtn
 
 	# -- Create Board
-	boardLayout = GridLayout(cols=4, size_hint=(0.45,0.45))
-	space1 = Button(text='1')  #row 1
+	boardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
+	space1 = Button()  #row 1
 	space1.size_hint=(0.1,0.1)
-	space2 = Button(text='2')
+	space2 = Button()
 	space2.size_hint=(0.1,0.1)
-	space3 = Button(text='3')
+	space3 = Button()
 	space3.size_hint=(0.1,0.1)
-	space4 = Button(text='4')
+	space4 = Button()
 	space4.size_hint=(0.1,0.1)
-	space5 = Button(text='5')  #row 2
+	space5 = Button()  #row 2
 	space5.size_hint=(0.1,0.1)
-	space6 = Button(text='6')
+	space6 = Button()
 	space6.size_hint=(0.1,0.1)
-	space7 = Button(text='7')
+	space7 = Button()
 	space7.size_hint=(0.1,0.1)
-	space8 = Button(text='8')
+	space8 = Button()
 	space8.size_hint=(0.1,0.1)
-	space9 = Button(text='9')  #row 3
+	space9 = Button()  #row 3
 	space9.size_hint=(0.1,0.1)
-	space10 = Button(text='10')
+	space10 = Button()
 	space10.size_hint=(0.1,0.1)
-	space11 = Button(text='11')
+	space11 = Button()
 	space11.size_hint=(0.1,0.1)
-	space12 = Button(text='12')
+	space12 = Button()
 	space12.size_hint=(0.1,0.1)
-	space13 = Button(text='13')  #row 4
+	space13 = Button()  #row 4
 	space13.size_hint=(0.1,0.1)
-	space14 = Button(text='14')
+	space14 = Button()
 	space14.size_hint=(0.1,0.1)
-	space15 = Button(text='15')
+	space15 = Button()
 	space15.size_hint=(0.1,0.1)
-	space16 = Button(text='16')
+	space16 = Button()
 	space16.size_hint=(0.1,0.1)
 
 	boardLayout.add_widget(space1)
@@ -147,7 +153,8 @@ def StartGame(instance):
 	piece14 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece14.jpg', background_disabled_down='piece14_disabled.jpg')
 	piece15 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece15.jpg', background_disabled_down='piece15_disabled.jpg')
 	piece16 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece16.jpg', background_disabled_down='piece16_disabled.jpg')
-	# -- Setup Event Listeners
+	
+	# -- Setup event listeners for pieces
 	piece1.bind(on_release = selectPiece)
 	piece1.name='1'
 	piece2.bind(on_release = selectPiece)
@@ -208,8 +215,6 @@ def StartGame(instance):
 	popup.open()
 
 
-
-# -- Mike Code
 #####################################
 # This is a callback function that has
 # been registered/binded with the gamePiece Buttons
@@ -228,36 +233,27 @@ def selectPiece(instance):
 	# Set the dissabled graphic
 	instance.background_disabled_normal = disabledGraphic
 	# Dissable the button so the disabled graphic shows
-	instance.disabled = True;
+	instance.disabled = True
 
 	### Set the 'Piece To Play' Button image to the selected piece
 	global g_pieceToPlay
+	g_pieceToPlay.background_color=(1,1,1,1)
 	g_pieceToPlay.background_normal = instance.background_normal
 
 # Now that a piece has been selected
 # We can update the board to reflect it.
-# I binded this function using a for loop on line 120 ctr+f '<(*_*<)'
+# bound this function using for loop on line 120
 def selectBoardLocation(instance):
 	global g_pieceToPlay
 	try:
-		instance.background_normal = g_pieceToPlay.background_normal
+		if g_pieceToPlay.background_normal != 'atlas://data/images/defaulttheme/button':
+			instance.background_disabled_normal = g_pieceToPlay.background_normal
+			instance.disabled = True
+			g_pieceToPlay.background_normal='atlas://data/images/defaulttheme/button'
+			g_pieceToPlay.background_color=(.2,1,.2,1)
 	except:
 		print('You have to select a piece to play first!')
 
-
-
-###############################  having trouble here!!!
-######### SELECT PIECE ########
-# def selectPiece(piece):
-# 	# -- ORLY?
-# 	# -- Please, think of the children!
-# 	window = piece.parent.parent.parent
-	
-# 	toPlayBtn.name = piece.name
-# 	print('this window: ', window.anchor_x, ' ', window.anchor_y)
-	
-##################################
-##################################
 	
 #popup func
 # -- Constructs Dialog Window asking user to select
