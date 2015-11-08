@@ -16,6 +16,8 @@ popup = Popup(title='Game Type?', size_hint=(None,None), size=(600, 600), auto_d
 
 #global yourPiece
 global g_pieceToPlay
+global g_player1
+global g_player2
 
 ########################MAIN MENU#######################################
 def MainMenu(instance):
@@ -31,21 +33,32 @@ def StartGame(instance):
 	# -- Holds reff to the pieceToPlay button
 	# -- Used when a piece is selected
 	global g_pieceToPlay
+	global g_player1
+	global g_player2
+	global g_moveTrack
+	
+	g_moveTrack = 1
 	
 	window = instance.parent.parent
 	window.clear_widgets()
 	
 	# -- Make Player 1 Label
-	player1Layout = AnchorLayout(anchor_x='left', anchor_y='top', padding=5)
-	player1 = Label(text='Player 1')
+	player1Layout = AnchorLayout(anchor_x='left', anchor_y='bottom', padding=5)
+	player1 = Label(text='Player 1: Selecting piece for Player 2')
+	player1.size_hint=(0.24,0.1)
 	player1Layout.add_widget(player1)
 	window.add_widget(player1Layout)
+	#set player1 global var
+	g_player1 = player1
 	
 	# -- Make Player 2 Label
-	player2Layout = AnchorLayout(anchor_x='left', anchor_y='bottom', padding=5)
-	player2 = Label(text='Player 2')
+	player2Layout = AnchorLayout(anchor_x='left', anchor_y='top', padding=5)
+	player2 = Label(text='Player 2: Waiting...')
+	player2.size_hint=(0.14,0.1)
 	player2Layout.add_widget(player2)
 	window.add_widget(player2Layout)
+	#set player2 global var
+	g_player2 = player2
 	
 	# --Menu Button
 	menuBtnLayout = AnchorLayout(anchor_x='right', anchor_y='top', padding=5)
@@ -221,36 +234,77 @@ def StartGame(instance):
 # See: http://kivy.org/docs/api-kivy.uix.button.html
 # Kivy auto populates 'instance' for us
 def selectPiece(instance):
-	# 'instance' is a 'pointer' to the button location in memory
-	# Thus we are able to access its properties...
-	print('Selected Button MemAddress: <%s>' % (instance))
-	print('Selected Button Image: <%s>' %(instance.background_normal))
+	
+	if g_pieceToPlay.background_normal == 'atlas://data/images/defaulttheme/button':
+		# 'instance' is a 'pointer' to the button location in memory
+		# Thus we are able to access its properties...
+		print('Selected Button MemAddress: <%s>' % (instance))
+		print('Selected Button Image: <%s>' %(instance.background_normal))
 
-	### Set peice to disabled graphic
-	# Contruct the dissabled graphic location string
-	disabledGraphic = instance.background_normal[:-4] + '_disabled.jpg'
-	#print (disabledGraphic)
-	# Set the dissabled graphic
-	instance.background_disabled_normal = disabledGraphic
-	# Dissable the button so the disabled graphic shows
-	instance.disabled = True
+		### Set peice to disabled graphic
+		# Contruct the dissabled graphic location string
+		disabledGraphic = instance.background_normal[:-4] + '_disabled.jpg'
+		#print (disabledGraphic)
+		# Set the dissabled graphic
+		instance.background_disabled_normal = disabledGraphic
+		# Dissable the button so the disabled graphic shows
+		instance.disabled = True
 
-	### Set the 'Piece To Play' Button image to the selected piece
-	global g_pieceToPlay
-	g_pieceToPlay.background_color=(1,1,1,1)
-	g_pieceToPlay.background_normal = instance.background_normal
+		### Set the 'Piece To Play' Button image to the selected piece
+		global g_pieceToPlay
+		g_pieceToPlay.background_color=(1,1,1,1)
+		g_pieceToPlay.background_normal = instance.background_normal
+		
+	else:		#Must Play Piece Once It's Picked!
+		err_popup = Popup(title='Wait!!!', content=Label(text='You must play the piece once its been chosen!'
+		' Like chess,\nthis version of Quarto is touch a piece, move a piece.'), size_hint=(0.5,0.5))
+		err_popup.open()
+	
+	#Game Flow Updater 1
+	global g_moveTrack
+	if g_moveTrack == 1:
+		g_player1.text='Player 1: Waiting...'
+		g_player1.size_hint=(0.14,0.1)
+		g_player2.text='Player 2: Making Move'
+		g_player2.size_hint=(0.16,0.1)
+		g_moveTrack = 2				#select for player 1
+	elif g_moveTrack == 3:
+		g_player1.text='Player 1: Making Move'
+		g_player1.size_hint=(0.16,0.1)
+		g_player2.text='Player 2: Waiting...'
+		g_player2.size_hint=(0.14,0.1)
+		g_moveTrack = 4				#select for player 2
+	
+	
 
 # Now that a piece has been selected
 # We can update the board to reflect it.
 # bound this function using for loop on line 120
 def selectBoardLocation(instance):
 	global g_pieceToPlay
+	global g_player1
+	global g_player2
+	global g_moveTrack
 	try:
 		if g_pieceToPlay.background_normal != 'atlas://data/images/defaulttheme/button':
 			instance.background_disabled_normal = g_pieceToPlay.background_normal
 			instance.disabled = True
 			g_pieceToPlay.background_normal='atlas://data/images/defaulttheme/button'
 			g_pieceToPlay.background_color=(.2,1,.2,1)
+			
+			#Game Flow Updater 2
+			if g_moveTrack == 2:
+				g_player1.text='Player 1: Waiting...'
+				g_player1.size_hint=(0.14,0.1)
+				g_player2.text='Player 2: Selecting piece for Player 1'
+				g_player2.size_hint=(0.24,0.1)
+				g_moveTrack = 3			#make player 1 move
+			elif g_moveTrack == 4:
+				g_player1.text='Player 1: Selecting piece for Player 2'
+				g_player1.size_hint=(0.24,0.1)
+				g_player2.text='Player 2: Waiting...'
+				g_player2.size_hint=(0.14,0.1)
+				g_moveTrack = 1			#make player 2 move
 	except:
 		print('You have to select a piece to play first!')
 
