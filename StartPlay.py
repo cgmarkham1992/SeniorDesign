@@ -78,47 +78,58 @@ def StartGame(instance):
 
 	# -- Create Board
 	boardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
-	space1 = Button(size_hint=(0.1,0.1))  #row 1
-	space2 = Button(size_hint=(0.1,0.1))
-	space3 = Button(size_hint=(0.1,0.1))
-	space4 = Button(size_hint=(0.1,0.1))
-	space5 = Button(size_hint=(0.1,0.1))  #row 2
-	space6 = Button(size_hint=(0.1,0.1))
-	space7 = Button(size_hint=(0.1,0.1))
-	space8 = Button(size_hint=(0.1,0.1))
-	space9 = Button(size_hint=(0.1,0.1))  #row 3
-	space10 = Button(size_hint=(0.1,0.1))
-	space11 = Button(size_hint=(0.1,0.1))
-	space12 = Button(size_hint=(0.1,0.1))
-	space13 = Button(size_hint=(0.1,0.1))  #row 4
-	space14 = Button(size_hint=(0.1,0.1))
-	space15 = Button(size_hint=(0.1,0.1))
-	space16 = Button(size_hint=(0.1,0.1))
-	
-	#######TRYING TO SHORTEN CODE A BIT TO MAKE IT MORE READABLE (MIKE HALP PLS!)
-	#for i in range(1, 16):
-	#	'space' + str(i) = Button(size_hint=(0.1,0.1))
-	
-	boardLayout.add_widget(space1)
-	boardLayout.add_widget(space2)
-	boardLayout.add_widget(space3)
-	boardLayout.add_widget(space4)
-	boardLayout.add_widget(space5)
-	boardLayout.add_widget(space6)
-	boardLayout.add_widget(space7)
-	boardLayout.add_widget(space8)
-	boardLayout.add_widget(space9)
-	boardLayout.add_widget(space10)
-	boardLayout.add_widget(space11)
-	boardLayout.add_widget(space12)
-	boardLayout.add_widget(space13)
-	boardLayout.add_widget(space14)
-	boardLayout.add_widget(space15)
-	boardLayout.add_widget(space16) 
+
+	# space1 = Button(size_hint=(0.1,0.1))  #row 1
+	# space2 = Button(size_hint=(0.1,0.1))
+	# space3 = Button(size_hint=(0.1,0.1))
+	# space4 = Button(size_hint=(0.1,0.1))
+	# space5 = Button(size_hint=(0.1,0.1))  #row 2
+	# space6 = Button(size_hint=(0.1,0.1))
+	# space7 = Button(size_hint=(0.1,0.1))
+	# space8 = Button(size_hint=(0.1,0.1))
+	# space9 = Button(size_hint=(0.1,0.1))  #row 3
+	# space10 = Button(size_hint=(0.1,0.1))
+	# space11 = Button(size_hint=(0.1,0.1))
+	# space12 = Button(size_hint=(0.1,0.1))
+	# space13 = Button(size_hint=(0.1,0.1))  #row 4
+	# space14 = Button(size_hint=(0.1,0.1))
+	# space15 = Button(size_hint=(0.1,0.1))
+	# space16 = Button(size_hint=(0.1,0.1))
+	# 
+	# #######TRYING TO SHORTEN CODE A BIT TO MAKE IT MORE READABLE (MIKE HALP PLS!)
+	# #for i in range(1, 16):
+	# #	'space' + str(i) = Button(size_hint=(0.1,0.1))
+	# 
+	# boardLayout.add_widget(space1)
+	# boardLayout.add_widget(space2)
+	# boardLayout.add_widget(space3)
+	# boardLayout.add_widget(space4)
+	# boardLayout.add_widget(space5)
+	# boardLayout.add_widget(space6)
+	# boardLayout.add_widget(space7)
+	# boardLayout.add_widget(space8)
+	# boardLayout.add_widget(space9)
+	# boardLayout.add_widget(space10)
+	# boardLayout.add_widget(space11)
+	# boardLayout.add_widget(space12)
+	# boardLayout.add_widget(space13)
+	# boardLayout.add_widget(space14)
+	# boardLayout.add_widget(space15)
+	# boardLayout.add_widget(space16) 
+
+	# -- Start Edits by Mike
+	for i in range(1,17):
+		# Create our piece graphic buttons
+		b = Button(size_hint=(0.1,0.1))
+		# Add event listern
+		b.bind(on_release = selectBoardLocation)
+		# Add to layout
+		boardLayout.add_widget(b)
+	# -- End Edits by Mike
 
 	# -- Bind Event Listener on all board pieces
-	for b in boardLayout.children[:]:
-		b.bind(on_release = selectBoardLocation)
+	# for b in boardLayout.children[:]:
+	# 	b.bind(on_release = selectBoardLocation)
 	
 	playBoardLayout.add_widget(boardLayout)
 	window.add_widget(playBoardLayout)   #end of middle board
@@ -128,47 +139,58 @@ def StartGame(instance):
 	smallBoardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
 	# -- Init pieces
 	#row 1
-	piece1 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece1.jpg')
-	piece2 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece2.jpg')
-	piece3 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece3.jpg')
-	piece4 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece4.jpg')
-	#row 2
-	piece5 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece5.jpg')  
-	piece6 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece6.jpg')
-	piece7 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece7.jpg')
-	piece8 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece8.jpg')
-	#row 3
-	piece9 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece9.jpg')
-	piece10 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece10.jpg')
-	piece11 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece11.jpg')
-	piece12 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece12.jpg')
-	#row 4
-	piece13 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece13.jpg') 
-	piece14 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece14.jpg')
-	piece15 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece15.jpg')
-	piece16 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece16.jpg')
-	
-	# -- Add pieces to right board
-	smallBoardLayout.add_widget(piece1)
-	smallBoardLayout.add_widget(piece2)
-	smallBoardLayout.add_widget(piece3)
-	smallBoardLayout.add_widget(piece4)
-	smallBoardLayout.add_widget(piece5)
-	smallBoardLayout.add_widget(piece6)
-	smallBoardLayout.add_widget(piece7)
-	smallBoardLayout.add_widget(piece8)
-	smallBoardLayout.add_widget(piece9)
-	smallBoardLayout.add_widget(piece10)
-	smallBoardLayout.add_widget(piece11)
-	smallBoardLayout.add_widget(piece12)
-	smallBoardLayout.add_widget(piece13)
-	smallBoardLayout.add_widget(piece14)
-	smallBoardLayout.add_widget(piece15)
-	smallBoardLayout.add_widget(piece16)
-	
+	# piece1 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece1.jpg')
+	# piece2 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece2.jpg')
+	# piece3 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece3.jpg')
+	# piece4 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece4.jpg')
+	# #row 2
+	# piece5 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece5.jpg')  
+	# piece6 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece6.jpg')
+	# piece7 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece7.jpg')
+	# piece8 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece8.jpg')
+	# #row 3
+	# piece9 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece9.jpg')
+	# piece10 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece10.jpg')
+	# piece11 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece11.jpg')
+	# piece12 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece12.jpg')
+	# #row 4
+	# piece13 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece13.jpg') 
+	# piece14 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece14.jpg')
+	# piece15 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece15.jpg')
+	# piece16 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece16.jpg')
+	# 
+	# # -- Add pieces to right board
+	# smallBoardLayout.add_widget(piece1)
+	# smallBoardLayout.add_widget(piece2)
+	# smallBoardLayout.add_widget(piece3)
+	# smallBoardLayout.add_widget(piece4)
+	# smallBoardLayout.add_widget(piece5)
+	# smallBoardLayout.add_widget(piece6)
+	# smallBoardLayout.add_widget(piece7)
+	# smallBoardLayout.add_widget(piece8)
+	# smallBoardLayout.add_widget(piece9)
+	# smallBoardLayout.add_widget(piece10)
+	# smallBoardLayout.add_widget(piece11)
+	# smallBoardLayout.add_widget(piece12)
+	# smallBoardLayout.add_widget(piece13)
+	# smallBoardLayout.add_widget(piece14)
+	# smallBoardLayout.add_widget(piece15)
+	# smallBoardLayout.add_widget(piece16)
+
+	# -- Start Edits by Mike
+	for i in range(1,17):
+		# Create our piece graphic buttons using 'i' to grab appropriate images
+		b = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece' + str(i) + '.jpg')
+		# Add the event listener
+		b.bind(on_release = selectPiece)
+		# add them to our layout
+		smallBoardLayout.add_widget(b)
+	# -- End Edits by Mike
+
+
 	# -- Setup event listeners for pieces
-	for p in smallBoardLayout.children[:]:
-		p.bind(on_release = selectPiece)
+	# for p in smallBoardLayout.children[:]:
+	#	p.bind(on_release = selectPiece)
 	
 	# -- Add to main view
 	piecesAvailableLayout.add_widget(smallBoardLayout)
