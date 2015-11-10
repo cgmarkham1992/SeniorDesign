@@ -44,26 +44,21 @@ def StartGame(instance):
 	
 	# -- Make Player 1 Label
 	player1Layout = AnchorLayout(anchor_x='left', anchor_y='bottom', padding=5)
-	player1 = Label(text='Player 1: Selecting piece for Player 2')
-	player1.size_hint=(0.24,0.1)
+	player1 = Label(text='Player 1: Selecting piece for Player 2', size_hint=(0.24,0.1))
 	player1Layout.add_widget(player1)
 	window.add_widget(player1Layout)
-	#set player1 global var
-	g_player1 = player1
+	g_player1 = player1		#set player1 global var
 	
 	# -- Make Player 2 Label
 	player2Layout = AnchorLayout(anchor_x='left', anchor_y='top', padding=5)
-	player2 = Label(text='Player 2: Waiting...')
-	player2.size_hint=(0.14,0.1)
+	player2 = Label(text='Player 2: Waiting...', size_hint=(0.14,0.1))
 	player2Layout.add_widget(player2)
 	window.add_widget(player2Layout)
-	#set player2 global var
-	g_player2 = player2
+	g_player2 = player2		#set player2 global var
 	
 	# --Menu Button
 	menuBtnLayout = AnchorLayout(anchor_x='right', anchor_y='top', padding=5)
-	menuBtn = Button(text='Main Menu', background_color=(0.2,0.32,1.8,1))
-	menuBtn.size_hint=(0.1,0.1)
+	menuBtn = Button(text='Main Menu', background_color=(0.2,0.32,1.8,1), size_hint=(0.1,0.1))
 	menuBtn.bind(on_release=MainMenu)
 	menuBtnLayout.add_widget(menuBtn)
 	window.add_widget(menuBtnLayout)
@@ -74,49 +69,36 @@ def StartGame(instance):
 	piecesAvailableLayout = AnchorLayout(anchor_x='right', anchor_y='center', padding=(80,0,40,0))
 	
 	# -- PieceToPlay Button	
-	toPlayBtn = Button(background_color=(.2,1,.2,1))
-	toPlayBtn.size_hint=(0.1,0.1)
-	toPlayBtn.name = ''
+	toPlayBtn = Button(background_color=(.2,1,.2,1), size_hint=(0.1,0.1))
 	pieceToPlayLayout.add_widget(toPlayBtn)
 	window.add_widget(pieceToPlayLayout)
-	# -- SETTING GLOBAL VAR HERE
+	
+	# -- SETTING pieceToPlay GLOBAL VAR
 	g_pieceToPlay = toPlayBtn
 
 	# -- Create Board
 	boardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
-	space1 = Button()  #row 1
-	space1.size_hint=(0.1,0.1)
-	space2 = Button()
-	space2.size_hint=(0.1,0.1)
-	space3 = Button()
-	space3.size_hint=(0.1,0.1)
-	space4 = Button()
-	space4.size_hint=(0.1,0.1)
-	space5 = Button()  #row 2
-	space5.size_hint=(0.1,0.1)
-	space6 = Button()
-	space6.size_hint=(0.1,0.1)
-	space7 = Button()
-	space7.size_hint=(0.1,0.1)
-	space8 = Button()
-	space8.size_hint=(0.1,0.1)
-	space9 = Button()  #row 3
-	space9.size_hint=(0.1,0.1)
-	space10 = Button()
-	space10.size_hint=(0.1,0.1)
-	space11 = Button()
-	space11.size_hint=(0.1,0.1)
-	space12 = Button()
-	space12.size_hint=(0.1,0.1)
-	space13 = Button()  #row 4
-	space13.size_hint=(0.1,0.1)
-	space14 = Button()
-	space14.size_hint=(0.1,0.1)
-	space15 = Button()
-	space15.size_hint=(0.1,0.1)
-	space16 = Button()
-	space16.size_hint=(0.1,0.1)
-
+	space1 = Button(size_hint=(0.1,0.1))  #row 1
+	space2 = Button(size_hint=(0.1,0.1))
+	space3 = Button(size_hint=(0.1,0.1))
+	space4 = Button(size_hint=(0.1,0.1))
+	space5 = Button(size_hint=(0.1,0.1))  #row 2
+	space6 = Button(size_hint=(0.1,0.1))
+	space7 = Button(size_hint=(0.1,0.1))
+	space8 = Button(size_hint=(0.1,0.1))
+	space9 = Button(size_hint=(0.1,0.1))  #row 3
+	space10 = Button(size_hint=(0.1,0.1))
+	space11 = Button(size_hint=(0.1,0.1))
+	space12 = Button(size_hint=(0.1,0.1))
+	space13 = Button(size_hint=(0.1,0.1))  #row 4
+	space14 = Button(size_hint=(0.1,0.1))
+	space15 = Button(size_hint=(0.1,0.1))
+	space16 = Button(size_hint=(0.1,0.1))
+	
+	#######TRYING TO SHORTEN CODE A BIT TO MAKE IT MORE READABLE (MIKE HALP PLS!)
+	#for i in range(1, 16):
+	#	'space' + str(i) = Button(size_hint=(0.1,0.1))
+	
 	boardLayout.add_widget(space1)
 	boardLayout.add_widget(space2)
 	boardLayout.add_widget(space3)
@@ -132,10 +114,9 @@ def StartGame(instance):
 	boardLayout.add_widget(space13)
 	boardLayout.add_widget(space14)
 	boardLayout.add_widget(space15)
-	boardLayout.add_widget(space16)
+	boardLayout.add_widget(space16) 
 
 	# -- Bind Event Listener on all board pieces
-	#print('<(*_*<)')
 	for b in boardLayout.children[:]:
 		b.bind(on_release = selectBoardLocation)
 	
@@ -147,60 +128,27 @@ def StartGame(instance):
 	smallBoardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
 	# -- Init pieces
 	#row 1
-	piece1 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece1.jpg', background_disabled_down='piece1_disabled.jpg')
-	piece2 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece2.jpg', background_disabled_down='piece2_disabled.jpg')
-	piece3 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece3.jpg', background_disabled_down='piece3_disabled.jpg')
-	piece4 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece4.jpg', background_disabled_down='piece4_disabled.jpg')
+	piece1 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece1.jpg')
+	piece2 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece2.jpg')
+	piece3 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece3.jpg')
+	piece4 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece4.jpg')
 	#row 2
-	piece5 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece5.jpg', background_disabled_down='piece5_disabled.jpg')  
-	piece6 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece6.jpg', background_disabled_down='piece6_disabled.jpg')
-	piece7 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece7.jpg', background_disabled_down='piece7_disabled.jpg')
-	piece8 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece8.jpg', background_disabled_down='piece8_disabled.jpg')
+	piece5 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece5.jpg')  
+	piece6 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece6.jpg')
+	piece7 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece7.jpg')
+	piece8 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece8.jpg')
 	#row 3
-	piece9 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece9.jpg', background_disabled_down='piece9_disabled.jpg')
-	piece10 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece10.jpg', background_disabled_down='piece10_disabled.jpg')
-	piece11 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece11.jpg', background_disabled_down='piece11_disabled.jpg')
-	piece12 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece12.jpg', background_disabled_down='piece12_disabled.jpg')
+	piece9 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece9.jpg')
+	piece10 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece10.jpg')
+	piece11 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece11.jpg')
+	piece12 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece12.jpg')
 	#row 4
-	piece13 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece13.jpg', background_disabled_down='piece13_disabled.jpg') 
-	piece14 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece14.jpg', background_disabled_down='piece14_disabled.jpg')
-	piece15 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece15.jpg', background_disabled_down='piece15_disabled.jpg')
-	piece16 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece16.jpg', background_disabled_down='piece16_disabled.jpg')
+	piece13 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece13.jpg') 
+	piece14 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece14.jpg')
+	piece15 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece15.jpg')
+	piece16 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece16.jpg')
 	
-	# -- Setup event listeners for pieces
-	piece1.bind(on_release = selectPiece)
-	piece1.name='1'
-	piece2.bind(on_release = selectPiece)
-	piece2.name='2'
-	piece3.bind(on_release = selectPiece)
-	piece3.name='3'
-	piece4.bind(on_release = selectPiece)
-	piece4.name='4'
-	piece5.bind(on_release = selectPiece)
-	piece5.name='5'
-	piece6.bind(on_release = selectPiece)
-	piece6.name='6'
-	piece7.bind(on_release = selectPiece)
-	piece7.name='7'
-	piece8.bind(on_release = selectPiece)
-	piece8.name='8'
-	piece9.bind(on_release = selectPiece)
-	piece9.name='9'
-	piece10.bind(on_release = selectPiece)
-	piece10.name='10'
-	piece11.bind(on_release = selectPiece)
-	piece11.name='11'
-	piece12.bind(on_release = selectPiece)
-	piece12.name='12'
-	piece13.bind(on_release = selectPiece)
-	piece13.name='13'
-	piece14.bind(on_release = selectPiece)
-	piece14.name='14'
-	piece15.bind(on_release = selectPiece)
-	piece15.name='15'
-	piece16.bind(on_release = selectPiece)
-	piece16.name='16'
-	# -- Add to Layout
+	# -- Add pieces to right board
 	smallBoardLayout.add_widget(piece1)
 	smallBoardLayout.add_widget(piece2)
 	smallBoardLayout.add_widget(piece3)
@@ -217,6 +165,11 @@ def StartGame(instance):
 	smallBoardLayout.add_widget(piece14)
 	smallBoardLayout.add_widget(piece15)
 	smallBoardLayout.add_widget(piece16)
+	
+	# -- Setup event listeners for pieces
+	for p in smallBoardLayout.children[:]:
+		p.bind(on_release = selectPiece)
+	
 	# -- Add to main view
 	piecesAvailableLayout.add_widget(smallBoardLayout)
 	window.add_widget(piecesAvailableLayout)
@@ -231,8 +184,8 @@ def StartGame(instance):
 #####################################
 # This is a callback function that has
 # been registered/binded with the gamePiece Buttons
-# See: http://kivy.org/docs/api-kivy.uix.button.html
-# Kivy auto populates 'instance' for us
+# Kivy auto populates 'instance'
+#####################################
 def selectPiece(instance):
 	
 	if g_pieceToPlay.background_normal == 'atlas://data/images/defaulttheme/button':
@@ -256,7 +209,7 @@ def selectPiece(instance):
 		g_pieceToPlay.background_normal = instance.background_normal
 		
 	else:		#Must Play Piece Once It's Picked!
-		err_popup = Popup(title='Wait!!!', content=Label(text='You must play the piece once its been chosen!'
+		err_popup = Popup(title='Oops!', content=Label(text='You must play the piece once it has been chosen...'
 		' Like chess,\nthis version of Quarto is touch a piece, move a piece.'), size_hint=(0.5,0.5))
 		err_popup.open()
 	
@@ -274,8 +227,7 @@ def selectPiece(instance):
 		g_player2.text='Player 2: Waiting...'
 		g_player2.size_hint=(0.14,0.1)
 		g_moveTrack = 4				#select for player 2
-	
-	
+
 
 # Now that a piece has been selected
 # We can update the board to reflect it.
@@ -339,10 +291,9 @@ def modeCheck(gameMode):
 	if gameMode == 1:
 		popup.dismiss()
 		print('You selected SINGLE PLAYER!')
-	else:
-		if gameMode == 2:
-			popup.dismiss()
-			print('You selected TWO PLAYER!')
+	elif gameMode == 2:
+		popup.dismiss()
+		print('You selected TWO PLAYER!')
 			
 			
 #SINGLE PLAYER FUNC
@@ -355,11 +306,9 @@ def twoPlayer(instance):
 	gameMode = 2
 	modeCheck(gameMode)
 	
-	
 		
 ########################INSTRUCTIONS MENU###############################
-def HelpMenu(instance):		
-	#print('The button <%s> is being pressed' % instance.text)
+def HelpMenu(instance):
 	window = instance.parent.parent
 	window.clear_widgets()
 	
@@ -409,7 +358,6 @@ class StartMenu(AnchorLayout):
 					'course at [i]Capitol Technology University[/i] that allowed\n' 
 					'him to complete his degree in Computer Science. He hopes\n'
 					'you have as much fun playing it as he did developing it.', markup=True, font_size=18)
-		
 		
 		newBtn = Button(text='New Game', background_color=(0.2,0.32,1.8,1), height=225, font_size=25)
 		newBtn.size_hint=(0.18,0.18)
