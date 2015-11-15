@@ -14,10 +14,25 @@ from kivy.uix.togglebutton import ToggleButton
 
 popup = Popup(title='Game Type?', size_hint=(None,None), size=(600, 600), auto_dismiss=False)
 
-#global yourPiece
 global g_pieceToPlay
 global g_player1
 global g_player2
+global g_playBoard
+
+g_playBoard = [0]*17
+
+# -- create tuple of tuples characterizing each individual piece
+# -- each value is either a 0 or 1 (height, color, shape, top)
+# -- short = 0;   tall = 1
+# -- light = 0;   dark = 1
+# -- square = 0;  circle = 1
+# -- flat = 0;    hollow = 1
+# -- i.e. a short, dark, square, flat piece would be (0, 1, 0, 0)
+global pieceFeatures
+pieceFeatures = [(1,1,1,1),(1,1,1,0),(0,1,1,1),(0,1,1,0),
+						(1,1,0,1),(1,1,0,0),(0,1,0,1),(0,1,0,0),
+						(1,0,1,1),(1,0,1,0),(0,0,1,1),(0,0,1,0),
+						(1,0,0,1),(1,0,0,0),(0,0,0,1),(0,0,0,0)]
 
 ########################MAIN MENU#######################################
 def MainMenu(instance):
@@ -36,8 +51,9 @@ def StartGame(instance):
 	global g_player1
 	global g_player2
 	global g_moveTrack
-	
 	g_moveTrack = 1
+	global categories
+	
 	
 	window = instance.parent.parent
 	window.clear_widgets()
@@ -79,105 +95,23 @@ def StartGame(instance):
 	# -- Create Board
 	boardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
 
-	# space1 = Button(size_hint=(0.1,0.1))  #row 1
-	# space2 = Button(size_hint=(0.1,0.1))
-	# space3 = Button(size_hint=(0.1,0.1))
-	# space4 = Button(size_hint=(0.1,0.1))
-	# space5 = Button(size_hint=(0.1,0.1))  #row 2
-	# space6 = Button(size_hint=(0.1,0.1))
-	# space7 = Button(size_hint=(0.1,0.1))
-	# space8 = Button(size_hint=(0.1,0.1))
-	# space9 = Button(size_hint=(0.1,0.1))  #row 3
-	# space10 = Button(size_hint=(0.1,0.1))
-	# space11 = Button(size_hint=(0.1,0.1))
-	# space12 = Button(size_hint=(0.1,0.1))
-	# space13 = Button(size_hint=(0.1,0.1))  #row 4
-	# space14 = Button(size_hint=(0.1,0.1))
-	# space15 = Button(size_hint=(0.1,0.1))
-	# space16 = Button(size_hint=(0.1,0.1))
-	# 
-	# #######TRYING TO SHORTEN CODE A BIT TO MAKE IT MORE READABLE (MIKE HALP PLS!)
-	# #for i in range(1, 16):
-	# #	'space' + str(i) = Button(size_hint=(0.1,0.1))
-	# 
-	# boardLayout.add_widget(space1)
-	# boardLayout.add_widget(space2)
-	# boardLayout.add_widget(space3)
-	# boardLayout.add_widget(space4)
-	# boardLayout.add_widget(space5)
-	# boardLayout.add_widget(space6)
-	# boardLayout.add_widget(space7)
-	# boardLayout.add_widget(space8)
-	# boardLayout.add_widget(space9)
-	# boardLayout.add_widget(space10)
-	# boardLayout.add_widget(space11)
-	# boardLayout.add_widget(space12)
-	# boardLayout.add_widget(space13)
-	# boardLayout.add_widget(space14)
-	# boardLayout.add_widget(space15)
-	# boardLayout.add_widget(space16) 
-
-	# -- Start Edits by Mike
+	# add buttons to main board
 	for i in range(1,17):
 		# Create our piece graphic buttons
-		b = Button(size_hint=(0.1,0.1))
+		b = Button(size_hint=(0.1,0.1), id=str(i))
 		# Add event listern
 		b.bind(on_release = selectBoardLocation)
 		# Add to layout
 		boardLayout.add_widget(b)
-	# -- End Edits by Mike
 
-	# -- Bind Event Listener on all board pieces
-	# for b in boardLayout.children[:]:
-	# 	b.bind(on_release = selectBoardLocation)
-	
 	playBoardLayout.add_widget(boardLayout)
 	window.add_widget(playBoardLayout)   #end of middle board
 	
 	# -- Create piecesToPlay
 	#availablePiecesToPlay
 	smallBoardLayout = GridLayout(cols=4, size_hint=(0.3,0.4))
+	
 	# -- Init pieces
-	#row 1
-	# piece1 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece1.jpg')
-	# piece2 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece2.jpg')
-	# piece3 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece3.jpg')
-	# piece4 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece4.jpg')
-	# #row 2
-	# piece5 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece5.jpg')  
-	# piece6 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece6.jpg')
-	# piece7 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece7.jpg')
-	# piece8 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece8.jpg')
-	# #row 3
-	# piece9 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece9.jpg')
-	# piece10 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece10.jpg')
-	# piece11 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece11.jpg')
-	# piece12 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece12.jpg')
-	# #row 4
-	# piece13 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece13.jpg') 
-	# piece14 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece14.jpg')
-	# piece15 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece15.jpg')
-	# piece16 = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece16.jpg')
-	# 
-	# # -- Add pieces to right board
-	# smallBoardLayout.add_widget(piece1)
-	# smallBoardLayout.add_widget(piece2)
-	# smallBoardLayout.add_widget(piece3)
-	# smallBoardLayout.add_widget(piece4)
-	# smallBoardLayout.add_widget(piece5)
-	# smallBoardLayout.add_widget(piece6)
-	# smallBoardLayout.add_widget(piece7)
-	# smallBoardLayout.add_widget(piece8)
-	# smallBoardLayout.add_widget(piece9)
-	# smallBoardLayout.add_widget(piece10)
-	# smallBoardLayout.add_widget(piece11)
-	# smallBoardLayout.add_widget(piece12)
-	# smallBoardLayout.add_widget(piece13)
-	# smallBoardLayout.add_widget(piece14)
-	# smallBoardLayout.add_widget(piece15)
-	# smallBoardLayout.add_widget(piece16)
-
-	# -- Start Edits by Mike
 	for i in range(1,17):
 		# Create our piece graphic buttons using 'i' to grab appropriate images
 		b = Button(background_color=(.88,.6,.3,1), size_hint=(0.05,0.05), background_normal = 'pieces/piece' + str(i) + '.jpg')
@@ -185,13 +119,7 @@ def StartGame(instance):
 		b.bind(on_release = selectPiece)
 		# add them to our layout
 		smallBoardLayout.add_widget(b)
-	# -- End Edits by Mike
 
-
-	# -- Setup event listeners for pieces
-	# for p in smallBoardLayout.children[:]:
-	#	p.bind(on_release = selectPiece)
-	
 	# -- Add to main view
 	piecesAvailableLayout.add_widget(smallBoardLayout)
 	window.add_widget(piecesAvailableLayout)
@@ -204,11 +132,13 @@ def StartGame(instance):
 
 
 #####################################
+# SELECT PIECE FUNCTION
 # This is a callback function that has
 # been registered/binded with the gamePiece Buttons
 # Kivy auto populates 'instance'
 #####################################
 def selectPiece(instance):
+	global pieceFeatures
 	
 	if g_pieceToPlay.background_normal == 'atlas://data/images/defaulttheme/button':
 		# 'instance' is a 'pointer' to the button location in memory
@@ -259,6 +189,9 @@ def selectBoardLocation(instance):
 	global g_player1
 	global g_player2
 	global g_moveTrack
+	global g_playBoard
+	global pieceFeatures
+	
 	try:
 		if g_pieceToPlay.background_normal != 'atlas://data/images/defaulttheme/button':
 			instance.background_disabled_normal = g_pieceToPlay.background_normal
@@ -266,22 +199,48 @@ def selectBoardLocation(instance):
 			g_pieceToPlay.background_normal='atlas://data/images/defaulttheme/button'
 			g_pieceToPlay.background_color=(.2,1,.2,1)
 			
+			#save the piece that was played
+			saveIndex = instance.background_disabled_normal[12:-4]
+			#get the characteristics of the piece
+			chars = pieceFeatures[int(saveIndex) - 1]
+			g_playBoard[int(instance.id)] = chars
+			print('Played piece: %s' %(g_playBoard[int(instance.id)],))
+			print('Selected Position: %s' %(instance.id))
+			
+			
+			
 			#Game Flow Updater 2
 			if g_moveTrack == 2:
 				g_player1.text='Player 1: Waiting...'
 				g_player1.size_hint=(0.14,0.1)
 				g_player2.text='Player 2: Selecting piece for Player 1'
 				g_player2.size_hint=(0.24,0.1)
+				winLoss(instance)				#check for win
 				g_moveTrack = 3			#make player 1 move
 			elif g_moveTrack == 4:
 				g_player1.text='Player 1: Selecting piece for Player 2'
 				g_player1.size_hint=(0.24,0.1)
 				g_player2.text='Player 2: Waiting...'
 				g_player2.size_hint=(0.14,0.1)
+				winLoss(instance)				#check for win
 				g_moveTrack = 1			#make player 2 move
 	except:
 		print('You have to select a piece to play first!')
 
+#win/loss function
+# -- checks for win conditions on the playBoard
+# -- called every time a piece is placed
+# -- if 4 pieces in a row of the same characteristic
+#    then win for the player who placed the last piece
+def winLoss(instance):
+	#print('in winLoss')
+	global g_playBoard
+	for i in range(1,17):
+		print('playBoard: ', g_playBoard[i])
+		
+	
+	
+	
 	
 #popup func
 # -- Constructs Dialog Window asking user to select
