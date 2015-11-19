@@ -11,6 +11,26 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.togglebutton import ToggleButton
+from collections import namedtuple
+
+pieceStruct = namedtuple("pieceStruct", "height color shape top")
+p1 = pieceStruct("tall", "dark", "circle", "hollow")
+p2 = pieceStruct("tall", "dark", "circle", "flat")
+p3 = pieceStruct("short", "dark", "circle", "hollow")
+p4 = pieceStruct("short", "dark", "circle", "flat")
+p5 = pieceStruct("tall", "dark", "square", "hollow")
+p6 = pieceStruct("tall", "dark", "square", "flat")
+p7 = pieceStruct("short", "dark", "square", "hollow")
+p8 = pieceStruct("short", "dark", "square", "flat")
+p9 = pieceStruct("tall", "light", "circle", "hollow")
+p10 = pieceStruct("tall", "light", "circle", "flat")
+p11 = pieceStruct("short", "light", "circle", "hollow")
+p12 = pieceStruct("short", "light", "circle", "flat")
+p13 = pieceStruct("tall", "light", "square", "hollow")
+p14 = pieceStruct("tall", "light", "square", "flat")
+p15 = pieceStruct("short", "light", "square", "hollow")
+p16 = pieceStruct("short", "light", "square", "flat")
+
 
 popup = Popup(title='Game Type?', size_hint=(None,None), size=(600, 600), auto_dismiss=False)
 
@@ -21,18 +41,9 @@ global g_playBoard
 
 g_playBoard = [0]*17
 
-# -- create tuple of tuples characterizing each individual piece
-# -- each value is either a 0 or 1 (height, color, shape, top)
-# -- short = 0;   tall = 1
-# -- light = 0;   dark = 1
-# -- square = 0;  circle = 1
-# -- flat = 0;    hollow = 1
-# -- i.e. a short, dark, square, flat piece would be (0, 1, 0, 0)
+# -- create list of tuples characterizing each individual piece
 global pieceFeatures
-pieceFeatures = [(1,1,1,1),(1,1,1,0),(0,1,1,1),(0,1,1,0),
-						(1,1,0,1),(1,1,0,0),(0,1,0,1),(0,1,0,0),
-						(1,0,1,1),(1,0,1,0),(0,0,1,1),(0,0,1,0),
-						(1,0,0,1),(1,0,0,0),(0,0,0,1),(0,0,0,0)]
+pieceFeatures = [ p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16]
 
 ########################MAIN MENU#######################################
 def MainMenu(instance):
@@ -143,8 +154,8 @@ def selectPiece(instance):
 	if g_pieceToPlay.background_normal == 'atlas://data/images/defaulttheme/button':
 		# 'instance' is a 'pointer' to the button location in memory
 		# Thus we are able to access its properties...
-		print('Selected Button MemAddress: <%s>' % (instance))
-		print('Selected Button Image: <%s>' %(instance.background_normal))
+		#print('Selected Button MemAddress: <%s>' % (instance))
+		#print('Selected Button Image: <%s>' %(instance.background_normal))
 
 		### Set peice to disabled graphic
 		# Contruct the dissabled graphic location string
@@ -204,10 +215,8 @@ def selectBoardLocation(instance):
 			#get the characteristics of the piece
 			chars = pieceFeatures[int(saveIndex) - 1]
 			g_playBoard[int(instance.id)] = chars
-			print('Played piece: %s' %(g_playBoard[int(instance.id)],))
-			print('Selected Position: %s' %(instance.id))
-			
-			
+			print('Played: %s' %(g_playBoard[int(instance.id)],))
+			print('Position: %s' %(instance.id))
 			
 			#Game Flow Updater 2
 			if g_moveTrack == 2:
@@ -232,11 +241,170 @@ def selectBoardLocation(instance):
 # -- called every time a piece is placed
 # -- if 4 pieces in a row of the same characteristic
 #    then win for the player who placed the last piece
+
+#pieceFeatures = [(1,1,1,1),(1,1,1,0),(0,1,1,1),(0,1,1,0),
+#						(1,1,0,1),(1,1,0,0),(0,1,0,1),(0,1,0,0),
+#						(1,0,1,1),(1,0,1,0),(0,0,1,1),(0,0,1,0),
+#						(1,0,0,1),(1,0,0,0),(0,0,0,1),(0,0,0,0)]
+
 def winLoss(instance):
 	#print('in winLoss')
 	global g_playBoard
-	for i in range(1,17):
-		print('playBoard: ', g_playBoard[i])
+	
+	#show the logic board
+	#for i in range(1,17):
+	#	print( g_playBoard[i] )
+
+	#ROW 1 WIN CHECKER
+	if( g_playBoard[1] != 0 and g_playBoard[2] != 0 and g_playBoard[3] != 0 and g_playBoard[4] != 0):
+		if(g_playBoard[1].height == g_playBoard[2].height and g_playBoard[2].height == g_playBoard[3].height 
+			and g_playBoard[3].height == g_playBoard[4].height ):
+				print('WIN FROM HEIGHTS IN ROW 1!')
+			
+		elif(g_playBoard[1].color == g_playBoard[2].color and g_playBoard[2].color == g_playBoard[3].color 
+			and g_playBoard[3].color == g_playBoard[4].color ):
+				print('WIN FROM COLOR IN ROW 1!')
+					
+		elif(g_playBoard[1].top == g_playBoard[2].top and g_playBoard[2].top == g_playBoard[3].top 
+			and g_playBoard[3].top == g_playBoard[4].top ):
+				print('WIN FROM TOP IN ROW 1!')
+					
+		elif(g_playBoard[1].shape == g_playBoard[2].shape and g_playBoard[2].shape == g_playBoard[3].shape 
+			and g_playBoard[3].shape == g_playBoard[4].shape ):
+				print('WIN FROM SHAPE IN ROW 1!')
+		
+	#ROW 2 WIN CHECKER
+	if( g_playBoard[5] != 0 and g_playBoard[6] != 0 and g_playBoard[7] != 0 and g_playBoard[8] != 0):
+		if(g_playBoard[5].height == g_playBoard[6].height and g_playBoard[6].height == g_playBoard[7].height 
+			and g_playBoard[7].height == g_playBoard[8].height ):
+				print('WIN FROM HEIGHTS IN ROW 2!')
+			
+		elif(g_playBoard[5].color == g_playBoard[6].color and g_playBoard[6].color == g_playBoard[7].color 
+			and g_playBoard[7].color == g_playBoard[8].color ):
+				print('WIN FROM COLOR IN ROW 2!')
+					
+		elif(g_playBoard[5].top == g_playBoard[6].top and g_playBoard[6].top == g_playBoard[7].top 
+			and g_playBoard[7].top == g_playBoard[8].top ):
+				print('WIN FROM TOP IN ROW 2!')
+					
+		elif(g_playBoard[5].shape == g_playBoard[6].shape and g_playBoard[6].shape == g_playBoard[7].shape 
+			and g_playBoard[7].shape == g_playBoard[8].shape ):
+				print('WIN FROM SHAPE IN ROW 2!')
+					
+	#ROW 3 WIN CHECKER
+	if( g_playBoard[9] != 0 and g_playBoard[10] != 0 and g_playBoard[11] != 0 and g_playBoard[12] != 0):
+		if(g_playBoard[9].height == g_playBoard[10].height and g_playBoard[10].height == g_playBoard[11].height 
+			and g_playBoard[11].height == g_playBoard[12].height ):
+				print('WIN FROM HEIGHTS IN ROW 3!')
+			
+		elif(g_playBoard[9].color == g_playBoard[10].color and g_playBoard[10].color == g_playBoard[11].color 
+			and g_playBoard[11].color == g_playBoard[12].color ):
+				print('WIN FROM COLOR IN ROW 3!')
+					
+		elif(g_playBoard[9].top == g_playBoard[10].top and g_playBoard[10].top == g_playBoard[11].top 
+			and g_playBoard[11].top == g_playBoard[12].top ):
+				print('WIN FROM TOP IN ROW 3!')
+					
+		elif(g_playBoard[9].shape == g_playBoard[10].shape and g_playBoard[10].shape == g_playBoard[11].shape 
+			and g_playBoard[11].shape == g_playBoard[12].shape ):
+				print('WIN FROM SHAPE IN ROW 3!')
+					
+		
+	#ROW 4 WIN CHECKER
+	if( g_playBoard[13] != 0 and g_playBoard[14] != 0 and g_playBoard[15] != 0 and g_playBoard[16] != 0):
+		if(g_playBoard[13].height == g_playBoard[14].height and g_playBoard[14].height == g_playBoard[15].height 
+			and g_playBoard[15].height == g_playBoard[16].height ):
+				print('WIN FROM HEIGHTS IN ROW 4!')
+			
+		elif(g_playBoard[13].color == g_playBoard[14].color and g_playBoard[14].color == g_playBoard[15].color 
+			and g_playBoard[15].color == g_playBoard[16].color ):
+				print('WIN FROM COLOR IN ROW 4!')
+					
+		elif(g_playBoard[13].top == g_playBoard[14].top and g_playBoard[14].top == g_playBoard[15].top 
+			and g_playBoard[15].top == g_playBoard[16].top ):
+				print('WIN FROM TOP IN ROW 4!')
+					
+		elif(g_playBoard[13].shape == g_playBoard[14].shape and g_playBoard[14].shape == g_playBoard[15].shape 
+			and g_playBoard[15].shape == g_playBoard[16].shape ):
+				print('WIN FROM SHAPE IN ROW 4!')
+		
+		
+	#COLUMN 1 WIN CHECKER
+	if( g_playBoard[1] != 0 and g_playBoard[5] != 0 and g_playBoard[9] != 0 and g_playBoard[13] != 0):
+		if(g_playBoard[1].height == g_playBoard[5].height and g_playBoard[5].height == g_playBoard[9].height 
+			and g_playBoard[9].height == g_playBoard[13].height ):
+				print('WIN FROM HEIGHTS IN COLUMN 1!')
+			
+		elif(g_playBoard[1].color == g_playBoard[5].color and g_playBoard[5].color == g_playBoard[9].color 
+			and g_playBoard[9].color == g_playBoard[13].color ):
+				print('WIN FROM COLOR IN COLUMN 1!')
+					
+		elif(g_playBoard[1].top == g_playBoard[5].top and g_playBoard[5].top == g_playBoard[9].top 
+			and g_playBoard[9].top == g_playBoard[13].top ):
+				print('WIN FROM TOP IN COLUMN 1!')
+					
+		elif(g_playBoard[1].shape == g_playBoard[5].shape and g_playBoard[5].shape == g_playBoard[9].shape 
+			and g_playBoard[9].shape == g_playBoard[13].shape ):
+				print('WIN FROM SHAPE IN COLUMN 1!')
+				
+				
+	#COLUMN 2 WIN CHECKER
+	if( g_playBoard[2] != 0 and g_playBoard[6] != 0 and g_playBoard[10] != 0 and g_playBoard[14] != 0):
+		if(g_playBoard[2].height == g_playBoard[6].height and g_playBoard[6].height == g_playBoard[10].height 
+			and g_playBoard[10].height == g_playBoard[14].height ):
+				print('WIN FROM HEIGHTS IN COLUMN 2!')
+			
+		elif(g_playBoard[2].color == g_playBoard[6].color and g_playBoard[6].color == g_playBoard[10].color 
+			and g_playBoard[10].color == g_playBoard[14].color ):
+				print('WIN FROM COLOR IN COLUMN 2!')
+					
+		elif(g_playBoard[2].top == g_playBoard[6].top and g_playBoard[6].top == g_playBoard[10].top 
+			and g_playBoard[10].top == g_playBoard[14].top ):
+				print('WIN FROM TOP IN COLUMN 2!')
+					
+		elif(g_playBoard[2].shape == g_playBoard[6].shape and g_playBoard[6].shape == g_playBoard[10].shape 
+			and g_playBoard[10].shape == g_playBoard[14].shape ):
+				print('WIN FROM SHAPE IN COLUMN 2!')
+				
+		
+	#COLUMN 3 WIN CHECKER
+	if( g_playBoard[3] != 0 and g_playBoard[7] != 0 and g_playBoard[11] != 0 and g_playBoard[15] != 0):
+		if(g_playBoard[3].height == g_playBoard[7].height and g_playBoard[7].height == g_playBoard[11].height 
+			and g_playBoard[11].height == g_playBoard[15].height ):
+				print('WIN FROM HEIGHTS IN COLUMN 3!')
+			
+		elif(g_playBoard[3].color == g_playBoard[7].color and g_playBoard[7].color == g_playBoard[11].color 
+			and g_playBoard[11].color == g_playBoard[15].color ):
+				print('WIN FROM COLOR IN COLUMN 3!')
+					
+		elif(g_playBoard[3].top == g_playBoard[7].top and g_playBoard[7].top == g_playBoard[11].top 
+			and g_playBoard[11].top == g_playBoard[15].top ):
+				print('WIN FROM TOP IN COLUMN 3!')
+					
+		elif(g_playBoard[3].shape == g_playBoard[7].shape and g_playBoard[7].shape == g_playBoard[11].shape 
+			and g_playBoard[11].shape == g_playBoard[15].shape ):
+				print('WIN FROM SHAPE IN COLUMN 3!')
+				
+	
+	#COLUMN 4 WIN CHECKER
+	if( g_playBoard[4] != 0 and g_playBoard[8] != 0 and g_playBoard[12] != 0 and g_playBoard[16] != 0):
+		if(g_playBoard[4].height == g_playBoard[8].height and g_playBoard[8].height == g_playBoard[12].height 
+			and g_playBoard[12].height == g_playBoard[16].height ):
+				print('WIN FROM HEIGHTS IN COLUMN 4!')
+			
+		elif(g_playBoard[4].color == g_playBoard[8].color and g_playBoard[8].color == g_playBoard[12].color 
+			and g_playBoard[12].color == g_playBoard[16].color ):
+				print('WIN FROM COLOR IN COLUMN 4!')
+					
+		elif(g_playBoard[4].top == g_playBoard[8].top and g_playBoard[8].top == g_playBoard[12].top 
+			and g_playBoard[12].top == g_playBoard[16].top ):
+				print('WIN FROM TOP IN COLUMN 4!')
+					
+		elif(g_playBoard[4].shape == g_playBoard[8].shape and g_playBoard[8].shape == g_playBoard[12].shape 
+			and g_playBoard[12].shape == g_playBoard[16].shape ):
+				print('WIN FROM SHAPE IN COLUMN 4!')
+		
+			
 		
 	
 	
@@ -267,7 +435,6 @@ def popUP():
 	popLayout.add_widget( popBtn1 )
 	popLayout.add_widget( popBtn2 )
 	
-	
 def modeCheck(gameMode):
 	if gameMode == 1:
 		popup.dismiss()
@@ -275,18 +442,16 @@ def modeCheck(gameMode):
 	elif gameMode == 2:
 		popup.dismiss()
 		print('You selected TWO PLAYER!')
-			
-			
+		
 #SINGLE PLAYER FUNC
 def singlePlayer(instance):
 	gameMode = 1
 	modeCheck(gameMode)
-			
+
 #TWO PLAYER FUNC
 def twoPlayer(instance):
 	gameMode = 2
 	modeCheck(gameMode)
-	
 		
 ########################INSTRUCTIONS MENU###############################
 def HelpMenu(instance):
