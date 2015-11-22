@@ -12,6 +12,8 @@ from kivy.uix.stacklayout import StackLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.togglebutton import ToggleButton
 from collections import namedtuple
+from kivy.core.audio import SoundLoader
+
 
 pieceStruct = namedtuple("pieceStruct", "height color shape top")
 p1 = pieceStruct("tall", "dark", "circle", "hollow")
@@ -31,13 +33,16 @@ p14 = pieceStruct("tall", "light", "square", "flat")
 p15 = pieceStruct("short", "light", "square", "hollow")
 p16 = pieceStruct("short", "light", "square", "flat")
 
-
 popup = Popup(title='Game Type?', size_hint=(None,None), size=(600, 600), auto_dismiss=False)
+win_popup = Popup(title='Winner!', size_hint=(0.5,0.5))
 
 global g_pieceToPlay
 global g_player1
 global g_player2
 global g_playBoard
+global soundLimiter
+
+soundLimiter = 0
 
 g_playBoard = [0]*17
 
@@ -86,6 +91,7 @@ def StartGame(instance):
 	# --Menu Button
 	menuBtnLayout = AnchorLayout(anchor_x='right', anchor_y='top', padding=5)
 	menuBtn = Button(text='Main Menu', background_color=(0.2,0.32,1.8,1), size_hint=(0.1,0.1))
+	menuBtn.bind(on_press=clickSoundPlay)
 	menuBtn.bind(on_release=MainMenu)
 	menuBtnLayout.add_widget(menuBtn)
 	window.add_widget(menuBtnLayout)
@@ -218,6 +224,9 @@ def selectBoardLocation(instance):
 			print('Played: %s' %(g_playBoard[int(instance.id)],))
 			print('Position: %s' %(instance.id))
 			
+			pieceMoveSound = SoundLoader.load('pieceMove.mp3')
+			pieceMoveSound.play()
+			
 			#Game Flow Updater 2
 			if g_moveTrack == 2:
 				g_player1.text='Player 1: Waiting...'
@@ -240,13 +249,7 @@ def selectBoardLocation(instance):
 # -- checks for win conditions on the playBoard
 # -- called every time a piece is placed
 # -- if 4 pieces in a row of the same characteristic
-#    then win for the player who placed the last piece
-
-#pieceFeatures = [(1,1,1,1),(1,1,1,0),(0,1,1,1),(0,1,1,0),
-#						(1,1,0,1),(1,1,0,0),(0,1,0,1),(0,1,0,0),
-#						(1,0,1,1),(1,0,1,0),(0,0,1,1),(0,0,1,0),
-#						(1,0,0,1),(1,0,0,0),(0,0,0,1),(0,0,0,0)]
-
+# -- then win for the player who placed the last piece
 def winLoss(instance):
 	#print('in winLoss')
 	global g_playBoard
@@ -259,157 +262,206 @@ def winLoss(instance):
 	if( g_playBoard[1] != 0 and g_playBoard[2] != 0 and g_playBoard[3] != 0 and g_playBoard[4] != 0):
 		if(g_playBoard[1].height == g_playBoard[2].height and g_playBoard[2].height == g_playBoard[3].height 
 			and g_playBoard[3].height == g_playBoard[4].height ):
-				print('WIN FROM HEIGHTS IN ROW 1!')
+				#print('WIN FROM HEIGHTS IN ROW 1!')
+				winString = 'WIN FROM HEIGHTS IN ROW 1!'
 			
 		elif(g_playBoard[1].color == g_playBoard[2].color and g_playBoard[2].color == g_playBoard[3].color 
 			and g_playBoard[3].color == g_playBoard[4].color ):
-				print('WIN FROM COLOR IN ROW 1!')
+				#print('WIN FROM COLOR IN ROW 1!')
+				winString = 'WIN FROM COLOR IN ROW 1!'
 					
 		elif(g_playBoard[1].top == g_playBoard[2].top and g_playBoard[2].top == g_playBoard[3].top 
 			and g_playBoard[3].top == g_playBoard[4].top ):
-				print('WIN FROM TOP IN ROW 1!')
+				#print('WIN FROM TOP IN ROW 1!')
+				winString = 'WIN FROM TOP IN ROW 1!'
 					
 		elif(g_playBoard[1].shape == g_playBoard[2].shape and g_playBoard[2].shape == g_playBoard[3].shape 
 			and g_playBoard[3].shape == g_playBoard[4].shape ):
-				print('WIN FROM SHAPE IN ROW 1!')
+				#print('WIN FROM SHAPE IN ROW 1!')
+				winString = 'WIN FROM SHAPE IN ROW 1!'
 		
 	#ROW 2 WIN CHECKER
 	if( g_playBoard[5] != 0 and g_playBoard[6] != 0 and g_playBoard[7] != 0 and g_playBoard[8] != 0):
 		if(g_playBoard[5].height == g_playBoard[6].height and g_playBoard[6].height == g_playBoard[7].height 
 			and g_playBoard[7].height == g_playBoard[8].height ):
-				print('WIN FROM HEIGHTS IN ROW 2!')
+				#print('WIN FROM HEIGHTS IN ROW 2!')
+				winString = 'WIN FROM HEIGHTS IN ROW 2!'
 			
 		elif(g_playBoard[5].color == g_playBoard[6].color and g_playBoard[6].color == g_playBoard[7].color 
 			and g_playBoard[7].color == g_playBoard[8].color ):
-				print('WIN FROM COLOR IN ROW 2!')
+				#print('WIN FROM COLOR IN ROW 2!')
+				winString = 'WIN FROM COLOR IN ROW 2!'
 					
 		elif(g_playBoard[5].top == g_playBoard[6].top and g_playBoard[6].top == g_playBoard[7].top 
 			and g_playBoard[7].top == g_playBoard[8].top ):
-				print('WIN FROM TOP IN ROW 2!')
+				#print('WIN FROM TOP IN ROW 2!')
+				winString = 'WIN FROM TOP IN ROW 2!'
 					
 		elif(g_playBoard[5].shape == g_playBoard[6].shape and g_playBoard[6].shape == g_playBoard[7].shape 
 			and g_playBoard[7].shape == g_playBoard[8].shape ):
-				print('WIN FROM SHAPE IN ROW 2!')
+				#print('WIN FROM SHAPE IN ROW 2!')
+				winString = 'WIN FROM SHAPE IN ROW 2!'
 					
 	#ROW 3 WIN CHECKER
 	if( g_playBoard[9] != 0 and g_playBoard[10] != 0 and g_playBoard[11] != 0 and g_playBoard[12] != 0):
 		if(g_playBoard[9].height == g_playBoard[10].height and g_playBoard[10].height == g_playBoard[11].height 
 			and g_playBoard[11].height == g_playBoard[12].height ):
-				print('WIN FROM HEIGHTS IN ROW 3!')
+				#print('WIN FROM HEIGHTS IN ROW 3!')
+				winString = 'WIN FROM HEIGHTS IN ROW 3!'
 			
 		elif(g_playBoard[9].color == g_playBoard[10].color and g_playBoard[10].color == g_playBoard[11].color 
 			and g_playBoard[11].color == g_playBoard[12].color ):
-				print('WIN FROM COLOR IN ROW 3!')
+				#print('WIN FROM COLOR IN ROW 3!')
+				winString = 'WIN FROM COLOR IN ROW 3!'
 					
 		elif(g_playBoard[9].top == g_playBoard[10].top and g_playBoard[10].top == g_playBoard[11].top 
 			and g_playBoard[11].top == g_playBoard[12].top ):
-				print('WIN FROM TOP IN ROW 3!')
+				#print('WIN FROM TOP IN ROW 3!')
+				winString = 'WIN FROM TOP IN ROW 3!'
 					
 		elif(g_playBoard[9].shape == g_playBoard[10].shape and g_playBoard[10].shape == g_playBoard[11].shape 
 			and g_playBoard[11].shape == g_playBoard[12].shape ):
-				print('WIN FROM SHAPE IN ROW 3!')
+				#print('WIN FROM SHAPE IN ROW 3!')
+				winString = 'WIN FROM SHAPE IN ROW 3!'
 					
 		
 	#ROW 4 WIN CHECKER
 	if( g_playBoard[13] != 0 and g_playBoard[14] != 0 and g_playBoard[15] != 0 and g_playBoard[16] != 0):
 		if(g_playBoard[13].height == g_playBoard[14].height and g_playBoard[14].height == g_playBoard[15].height 
 			and g_playBoard[15].height == g_playBoard[16].height ):
-				print('WIN FROM HEIGHTS IN ROW 4!')
+				#print('WIN FROM HEIGHTS IN ROW 4!')
+				winString = 'WIN FROM HEIGHTS IN ROW 4!'
 			
 		elif(g_playBoard[13].color == g_playBoard[14].color and g_playBoard[14].color == g_playBoard[15].color 
 			and g_playBoard[15].color == g_playBoard[16].color ):
-				print('WIN FROM COLOR IN ROW 4!')
+				#print('WIN FROM COLOR IN ROW 4!')
+				winString = 'WIN FROM COLOR IN ROW 4!'
 					
 		elif(g_playBoard[13].top == g_playBoard[14].top and g_playBoard[14].top == g_playBoard[15].top 
 			and g_playBoard[15].top == g_playBoard[16].top ):
-				print('WIN FROM TOP IN ROW 4!')
+				#print('WIN FROM TOP IN ROW 4!')
+				winString = 'WIN FROM TOP IN ROW 4!'
 					
 		elif(g_playBoard[13].shape == g_playBoard[14].shape and g_playBoard[14].shape == g_playBoard[15].shape 
 			and g_playBoard[15].shape == g_playBoard[16].shape ):
-				print('WIN FROM SHAPE IN ROW 4!')
+				#print('WIN FROM SHAPE IN ROW 4!')
+				winString = 'WIN FROM SHAPE IN ROW 4!'
 		
 		
 	#COLUMN 1 WIN CHECKER
 	if( g_playBoard[1] != 0 and g_playBoard[5] != 0 and g_playBoard[9] != 0 and g_playBoard[13] != 0):
 		if(g_playBoard[1].height == g_playBoard[5].height and g_playBoard[5].height == g_playBoard[9].height 
 			and g_playBoard[9].height == g_playBoard[13].height ):
-				print('WIN FROM HEIGHTS IN COLUMN 1!')
+				#print('WIN FROM HEIGHTS IN COLUMN 1!')
+				winString = 'WIN FROM HEIGHTS IN COLUMN 1!'
 			
 		elif(g_playBoard[1].color == g_playBoard[5].color and g_playBoard[5].color == g_playBoard[9].color 
 			and g_playBoard[9].color == g_playBoard[13].color ):
-				print('WIN FROM COLOR IN COLUMN 1!')
+				#print('WIN FROM COLOR IN COLUMN 1!')
+				winString = 'WIN FROM COLOR IN COLUMN 1!'
 					
 		elif(g_playBoard[1].top == g_playBoard[5].top and g_playBoard[5].top == g_playBoard[9].top 
 			and g_playBoard[9].top == g_playBoard[13].top ):
-				print('WIN FROM TOP IN COLUMN 1!')
+				#print('WIN FROM TOP IN COLUMN 1!')
+				winString = 'WIN FROM TOP IN COLUMN 1!'
 					
 		elif(g_playBoard[1].shape == g_playBoard[5].shape and g_playBoard[5].shape == g_playBoard[9].shape 
 			and g_playBoard[9].shape == g_playBoard[13].shape ):
-				print('WIN FROM SHAPE IN COLUMN 1!')
+				#print('WIN FROM SHAPE IN COLUMN 1!')
+				winString = 'WIN FROM SHAPE IN COLUMN 1!'
 				
 				
 	#COLUMN 2 WIN CHECKER
 	if( g_playBoard[2] != 0 and g_playBoard[6] != 0 and g_playBoard[10] != 0 and g_playBoard[14] != 0):
 		if(g_playBoard[2].height == g_playBoard[6].height and g_playBoard[6].height == g_playBoard[10].height 
 			and g_playBoard[10].height == g_playBoard[14].height ):
-				print('WIN FROM HEIGHTS IN COLUMN 2!')
+				#print('WIN FROM HEIGHTS IN COLUMN 2!')
+				winString = 'WIN FROM HEIGHTS IN COLUMN 2!'
 			
 		elif(g_playBoard[2].color == g_playBoard[6].color and g_playBoard[6].color == g_playBoard[10].color 
 			and g_playBoard[10].color == g_playBoard[14].color ):
-				print('WIN FROM COLOR IN COLUMN 2!')
+				#print('WIN FROM COLOR IN COLUMN 2!')
+				winString = 'WIN FROM COLOR IN COLUMN 2!'
 					
 		elif(g_playBoard[2].top == g_playBoard[6].top and g_playBoard[6].top == g_playBoard[10].top 
 			and g_playBoard[10].top == g_playBoard[14].top ):
-				print('WIN FROM TOP IN COLUMN 2!')
+				#print('WIN FROM TOP IN COLUMN 2!')
+				winString = 'WIN FROM TOP IN COLUMN 2!'
 					
 		elif(g_playBoard[2].shape == g_playBoard[6].shape and g_playBoard[6].shape == g_playBoard[10].shape 
 			and g_playBoard[10].shape == g_playBoard[14].shape ):
-				print('WIN FROM SHAPE IN COLUMN 2!')
+				#print('WIN FROM SHAPE IN COLUMN 2!')
+				winString = 'WIN FROM SHAPE IN COLUMN 2!'
 				
 		
 	#COLUMN 3 WIN CHECKER
 	if( g_playBoard[3] != 0 and g_playBoard[7] != 0 and g_playBoard[11] != 0 and g_playBoard[15] != 0):
 		if(g_playBoard[3].height == g_playBoard[7].height and g_playBoard[7].height == g_playBoard[11].height 
 			and g_playBoard[11].height == g_playBoard[15].height ):
-				print('WIN FROM HEIGHTS IN COLUMN 3!')
+				#print('WIN FROM HEIGHTS IN COLUMN 3!')
+				winString = 'WIN FROM HEIGHTS IN COLUMN 3!'
 			
 		elif(g_playBoard[3].color == g_playBoard[7].color and g_playBoard[7].color == g_playBoard[11].color 
 			and g_playBoard[11].color == g_playBoard[15].color ):
-				print('WIN FROM COLOR IN COLUMN 3!')
+				#print('WIN FROM COLOR IN COLUMN 3!')
+				winString = 'WIN FROM COLOR IN COLUMN 3!'
 					
 		elif(g_playBoard[3].top == g_playBoard[7].top and g_playBoard[7].top == g_playBoard[11].top 
 			and g_playBoard[11].top == g_playBoard[15].top ):
-				print('WIN FROM TOP IN COLUMN 3!')
+				#print('WIN FROM TOP IN COLUMN 3!')
+				winString = 'WIN FROM TOP IN COLUMN 3!'
 					
 		elif(g_playBoard[3].shape == g_playBoard[7].shape and g_playBoard[7].shape == g_playBoard[11].shape 
 			and g_playBoard[11].shape == g_playBoard[15].shape ):
-				print('WIN FROM SHAPE IN COLUMN 3!')
+				#print('WIN FROM SHAPE IN COLUMN 3!')
+				winString = 'WIN FROM SHAPE IN COLUMN 3!'
 				
 	
 	#COLUMN 4 WIN CHECKER
 	if( g_playBoard[4] != 0 and g_playBoard[8] != 0 and g_playBoard[12] != 0 and g_playBoard[16] != 0):
 		if(g_playBoard[4].height == g_playBoard[8].height and g_playBoard[8].height == g_playBoard[12].height 
 			and g_playBoard[12].height == g_playBoard[16].height ):
-				print('WIN FROM HEIGHTS IN COLUMN 4!')
+				#print('WIN FROM HEIGHTS IN COLUMN 4!')
+				winString = 'WIN FROM HEIGHTS IN COLUMN 4!'
 			
 		elif(g_playBoard[4].color == g_playBoard[8].color and g_playBoard[8].color == g_playBoard[12].color 
 			and g_playBoard[12].color == g_playBoard[16].color ):
-				print('WIN FROM COLOR IN COLUMN 4!')
+				#print('WIN FROM COLOR IN COLUMN 4!')
+				winString = 'WIN FROM COLOR IN COLUMN 4!'
 					
 		elif(g_playBoard[4].top == g_playBoard[8].top and g_playBoard[8].top == g_playBoard[12].top 
 			and g_playBoard[12].top == g_playBoard[16].top ):
-				print('WIN FROM TOP IN COLUMN 4!')
+				#print('WIN FROM TOP IN COLUMN 4!')
+				winString = 'WIN FROM TOP IN COLUMN 4!'
 					
 		elif(g_playBoard[4].shape == g_playBoard[8].shape and g_playBoard[8].shape == g_playBoard[12].shape 
 			and g_playBoard[12].shape == g_playBoard[16].shape ):
-				print('WIN FROM SHAPE IN COLUMN 4!')
-		
-			
-		
+				#print('WIN FROM SHAPE IN COLUMN 4!')
+				winString = 'WIN FROM SHAPE IN COLUMN 4!'
+				
+	winPopup(winString)
+
+
+def winPopup(winCondition):
+	
+	winLayout = StackLayout()
+	
+	winLabel = Label(text = winCondition, size_hint = (1.0,0.8))
+	menuBtn = Button(text = 'Main Menu', size_hint = (0.5,0.2))
+	#menuBtn.bind(on_release = menuFromPopup)
+	quitBtn = Button(text = 'Quit to Desktop', size_hint = (0.5,0.2))
+	#quitBtn.bind(on_release = exit())
+	
+	winLayout.add_widget(winLabel)
+	winLayout.add_widget(menuBtn)
+	winLayout.add_widget(quitBtn)
+	
+	win_popup.content = winLayout
+	win_popup.open()
 	
 	
-	
-	
+
+
 #popup func
 # -- Constructs Dialog Window asking user to select
 # -- Single or Two Player Game
@@ -418,18 +470,16 @@ def winLoss(instance):
 def popUP():
 	popLayout = StackLayout()
 	
-	popup.content=popLayout
+	popup.content = popLayout
 					
-	popText = Label(text='What type of game would you like to play?')
-	popText.size_hint=(1.0,0.9)
+	popText = Label(text='What type of game would you like to play?', size_hint=(1.0,0.9))
 	
-	popBtn1 = Button(text='Single Player', group='choice')
+	popBtn1 = Button(text='Single Player', group='choice', size_hint=( 0.5, 0.1 ))
+	popBtn1.bind(on_press=clickSoundPlay)
 	popBtn1.bind(on_release = singlePlayer)
-	popBtn2 = Button(text='Two Player', group='choice')
+	popBtn2 = Button(text='Two Player', group='choice', size_hint=( 0.5, 0.1 ))
+	popBtn2.bind(on_press=clickSoundPlay)
 	popBtn2.bind(on_release = twoPlayer)
-
-	popBtn1.size_hint=( 0.5, 0.1 )
-	popBtn2.size_hint=( 0.5, 0.1 )
 	
 	popLayout.add_widget( popText )
 	popLayout.add_widget( popBtn1 )
@@ -463,6 +513,7 @@ def HelpMenu(instance):
 	buttonLayout = AnchorLayout(anchor_x='right', anchor_y='top', padding=5)		
 	btn = Button(text='Main Menu', background_color=(0.2,0.32,1.8,1))
 	btn.size_hint=(0.1,0.1)
+	btn.bind(on_press=clickSoundPlay)
 	btn.bind(on_release=MainMenu)
 		
 	DescObjLabel = Label(text='[b]Description[/b]\n\nQuarto is a game played by two players on a 4x4,' 
@@ -489,9 +540,23 @@ def HelpMenu(instance):
 def ExitFunc(instance):
 	exit()
 	
+def clickSoundPlay(instance):
+	menuClickSound = SoundLoader.load('MenuClick.mp3')
+	menuClickSound.play()
+	
 class StartMenu(AnchorLayout):
 	def __init__(self, **kwargs):
 		super(StartMenu, self).__init__(**kwargs)
+		
+		pieceMoveSound = SoundLoader.load('pieceMove.mp3')
+		trackSound = SoundLoader.load('backgroundTrack.mp3')
+		
+		global soundLimiter
+		
+		if soundLimiter == 0:
+			trackSound.loop = True
+			trackSound.play()
+			soundLimiter = 1
 		
 		openLayoutLabel = AnchorLayout(anchor_x='left', anchor_y='center', padding=25)
 		playGameBtnLayout = AnchorLayout(anchor_x='left', anchor_y='bottom', padding=(130,30,-85,10))
@@ -507,15 +572,18 @@ class StartMenu(AnchorLayout):
 		
 		newBtn = Button(text='New Game', background_color=(0.2,0.32,1.8,1), height=225, font_size=25)
 		newBtn.size_hint=(0.18,0.18)
+		newBtn.bind(on_press=clickSoundPlay)
 		newBtn.bind(on_release=StartGame)
 		
 		helpBtn = Button(text='Instructions', background_color=(0.2,1.8,0.32,0.8), font_size=25)
 		helpBtn.size_hint=(0.18,0.18)
+		helpBtn.bind(on_press=clickSoundPlay)
 		helpBtn.bind(on_release=HelpMenu)
 		
 		exitBtn = Button(text='Exit', background_color=(1.8,0.32,0.2,1), font_size=25)
 		exitBtn.size_hint=(0.18,0.18)
-		exitBtn.bind(on_press=ExitFunc)
+		exitBtn.bind(on_press=clickSoundPlay)
+		exitBtn.bind(on_release=ExitFunc)
 		
 		openLayoutLabel.add_widget(header)
 		playGameBtnLayout.add_widget(newBtn)
